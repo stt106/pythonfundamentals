@@ -1,4 +1,4 @@
-# Complex is better than complicated; Flight class is more complex but none of the client of flight needs to know about the aircraft model details 
+# Complex is better than complicated; Flight class is more complex but none of the client of flight needs to know about the aircraft model details which would be more complicated. 
 class Flight:
     """A flight with a particular aircraft model"""
 
@@ -23,7 +23,7 @@ class Flight:
         self._seating = [None] + [{str(row) + letter : None for letter in seats} for row in rows]
     
     
-    # private/implementation details by convention begin with _ 
+    # public implementation details by convention begin with _ 
     def _parse_seat(self, seat):
         """Parse a seat designator into a valid row and letter
         
@@ -77,7 +77,8 @@ class Flight:
 
         """
         from_row, _ = self._parse_seat(from_seat)
-        if self._seating[from_row][from_seat] is None:
+        current_passenger = self._seating[from_row][from_seat]
+        if current_passenger is None:
             raise ValueError("No passenger to relocate in seat {}".format(from_seat))
         
         to_row, _ = self._parse_seat(to_seat)
@@ -85,7 +86,7 @@ class Flight:
             raise ValueError("Seat {} is already occupied".format(to_seat))
         
         # everything is passed by reference so it's better NOT to cache the passenger name in case it's a mutable object
-        self._seating[to_row][to_seat] = self._seating[from_row][from_seat]
+        self._seating[to_row][to_seat] = current_passenger
         self._seating[from_row][from_seat] = None
         
     
@@ -143,20 +144,17 @@ class Aircraft: # abstract base class used for sharing implementation details.
         return self._registration
 
 
-#duck tpying of Aircraft. In statically typed language like C#, runtime ploymorphism is achieved through class based inheritance.
-# This is not the case in Python because no Python method call or attributes lookups are NOT bound to actual objects until the point at 
+#duck tpying of Aircraft. In statically typed language like C#, runtime ploymorphism is achieved through class based inheritance or interface implementation.
+# This is not the case in Python because Python method call or attributes lookups are NOT bound to actual objects until the point at 
 # which they are called (known as late binding) means we can attempt ploymorphism with any object (rather than just the base/sub classes!)
 # and will succeed if the object fits. Although inheritance in Python can be used to facilitate polymorphism, after all derived class will have 
 # the same interface as the base classes, inheritance in Python is most useful in sharing implementation between classes.
-# Thanks to duck typing, inheritance is less used in python which is a good thing because inheritance is very tight coupling between classes. 
+# Thanks to duck typing, inheritance is less used in python which is a good thing because inheritance enables very tight coupling between classes. 
 class AirbusA319(Aircraft): 
     def __init__(self, registration):
         self._registration = registration
     
-
-    def registration(self):
-        return self._registration
-    
+   
 
     def model(self):
         return "AirbusA319"
@@ -169,10 +167,7 @@ class Boeing777(Aircraft):
     def __init__(self, registration):
         self._registration = registration
     
-
-    def registration(self):
-        return self._registration
-    
+  
 
     def model(self):
         return "Boeing777"
@@ -224,7 +219,7 @@ def main():
 # Ploymorphism is the concept of allowing objects of different type through an uniform interface; it can be applied to functions and complex objects.
 # This function is ploymorphic because it can be used by different object types acting like a common interface.
 # Ploymorphism in Python is achieved through duck typing e.g. a object fitness for prupose is only determined at runtime (e.g. at time of use!)
-# Duck typing is the cornerstone of Python object system, unlike other statically typed languaged where compiler determines whether an object can be used.
+# Duck typing is the cornerstone of Python object system, unlike other statically typed languaged where compiler determines whether an object can be used at compile time.
 # In Python, whether an object can be used is purely dependent on the attributes an object has at the time of use. 
 # Duck typing and ploymorphism are very important in Python and collection protocols (iterable, iterator, sequences) are built upon these two.
 def console_card_printer(passenger_name, seat, flight_number, aircraft_model):
@@ -234,8 +229,8 @@ def console_card_printer(passenger_name, seat, flight_number, aircraft_model):
     banner = '+' + '-' * (len(content) - 2) + '+'
     border = '|' + ' ' * (len(content) - 2) + '|'
     lines = [banner, border, content, border, banner]
-    card = '\n'.join(lines) # convert list of string into a single string
-    print(card)
+    card = '\n'.join(lines) # convert list of string into a single string on different lines!
+    print(card) # print out the final result 
     print() # another empty line  
 
 
@@ -243,3 +238,4 @@ def console_card_printer(passenger_name, seat, flight_number, aircraft_model):
 if __name__ == '__main__':
     main()
     #console_card_card_printer('Rita Liu', 'CA938', '22E', 'Airbus A330')
+
