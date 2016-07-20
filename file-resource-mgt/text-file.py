@@ -20,6 +20,7 @@
 
 h = open('wasteland.txt', mode = 'wt', encoding = 'utf-8')
 print(type(h))
+#print(dir(h))
 #print(help(h))
 
 h.write('What are the roots that clutch, ') # this returns the number of codepoints or characters in the string passed; NOT the number of bytes to the file after encoding a universal newline translation. Hence it's bad practice to rely on the numbers returned by write to get the total number of bytes!
@@ -45,3 +46,37 @@ r.seek(0) # seeking to beginning of the file. returns the new position of the fi
 # to read a while line
 print(r.readline())
 print(r.readline())
+print(r.readline()) # at the end of the file, readline() returns empty string 
+
+r.seek(0)
+# if want to read all lines at once and know for sure there is enough memory; this is particularly useful if parsing the file invovles hopping backwards and forwards between lines so putting them into a list is useful!
+all_lines = r.readlines(); # put each line into a list 
+print(all_lines)
+r.close() # close the file to release the resource
+
+
+# Appending to text files
+a = open('wasteland.txt', mode='at', encoding='utf-8')
+# writelines exist but no writeline
+# this takes a series of string and must specify explicit line-ending to provide symmetry with readlines()
+a.writelines(['Son of man,\n', 
+                'You cannot say, or guests, ', 'for you know only, \n', 
+            'A heap of broken images, ', 'where the sun beats\n']) # this should write 3 new lines. The file doesn't end with a new line. 
+a.close()
+
+
+# The notion that files are like objects in python is not supported strongly by any protocol but it works well due to duck typing and polymorphism. Namely, depending on the file path, open will return different specific objects which all behave like a file! 
+def word_per_line(fileobject): # any object bahaves like a file will be fine for this function to work due to duck typing!
+    return [len(line.split()) for line in fileobject.readlines()]
+
+def main():
+    with open('wasteland.txt', mode="tr", encoding="utf-8") as file:
+        word_counter = word_per_line(file) # pass in a text file which is io.textWrapper 
+        print(word_counter)
+
+    from urllib.request import urlopen
+    with urlopen('http://sixty-north.com/c/t.txt') as webfile:
+        print(word_per_line(webfile)) # webfile is a http.client.HTTPResponse
+
+if __name__ == '__main__':
+    main()
