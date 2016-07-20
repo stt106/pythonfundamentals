@@ -10,7 +10,7 @@ print(x)
 y = x # this copies the int object reference x to object reference y hence both x and y now refer to the same int object 5.
 print(y)
 
-y = 6 # this assigns the object reference y to int object 6; x is unaffected
+y = 6 # this assigns the object reference y to a newly created int object 6; x is unaffected
 print(y)
 
 # built-in id() returns an unique object identifier but it's seldom used in production
@@ -86,7 +86,10 @@ add([3], [4])
 add(3.4, 5.4)
 
 # strongly typed e.g. there is no implicit conversion between types (unlike javascript) so this doesn't work. The exception is converting to bool! 
-add('3', 4)
+try:
+    add('3', 4)
+except TypeError:
+    print('Python is strongly typed as doesnot automatically convert between types!')
 
 # scopes in python are defined using LEGB (Local, Enbracing, Global, and Builtins)
 # to use a global variable within a local scope; use 'global' keyword
@@ -96,9 +99,10 @@ add('3', 4)
 # everything in python is an object including int, string, module, function!!!
 import words
 
-print(type(words)) # get the type of the object; everything is an object!
-print(dir(words)) # get all attributes on an object including the ones imported and defined 
+print(type(words)) # get the type of a module; everything is an object!
+print('Attributes of a module:', dir(words)) # get all attributes on an object including the ones imported and defined 
 
 print(type(words.fetch_words)) # get type of a function 
 print(dir(words.fetch_words)) # get all attributes of a function 
 print(words.fetch_words.__code__) # get a particular attribute of a function 
+
