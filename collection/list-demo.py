@@ -1,4 +1,4 @@
-# list is like tuple e.g. it's a hetergeneous mutable sequence.
+# list is a hetergeneous but mutable sequence.
 
 # string is a list of other strings
 s = "show how to index into sequences"
@@ -10,7 +10,8 @@ print(words[-5]) # 5th element starting from the right
 
 # slice(startindex:stopindex)
 print(words[1:4]) # note this returns a new list with [startindex, stopindex)
-print(words[1:-1]) # combine slice with negative index; this excludes the last element
+print(words[1:-1]) # combine slice with negative index; this excludes the first and last element
+print(words)
 
 # both start and stop index are optional; hence s[:x] + s[x:] gives the whole list  
 print(words[3:]) # from 4th element to the end; 
@@ -19,7 +20,7 @@ print(words[:3]) # from the begining to the 3rd element
 # shallow copy of list; but it doesn't deep copy the elements of the list in case they mutable!
 copiedWords = words[:]
 print(copiedWords)
-print(copiedWords is words) # show it's a deep copy
+print('Is deep copy?', copiedWords is words) # show it's a shallow copy
 print(copiedWords == words) # show they are value equivalent 
 
 copiedWords[3] = 'updated!'
@@ -73,6 +74,8 @@ print('Is unicor in the it?', 'unicor' in w) # test membership; not in also work
 # remove elements from the list with del element or remove(element)
 del w[3] # remove the 4th element
 print(w)
+# del w[100] this throws IndexError.
+
 w.remove('brown') # remove takes the actual element to be removed; if unexist will throw ValueError  
 print(w)
 
@@ -84,15 +87,15 @@ print(a)
 print(' '.join(a)) # convert the list of string into a single string; only works on string list 
 
 
-# different ways to grow list; these work on all iterable sequence; not just list
+# different ways to grow list; these work on all iterable sequence as the input; not just list
 m = [1, 2, 3]
 n = [4, 5, 6]
 k = m + n
 print(k)
 k += [7, 8, 9]
 print(k)
-k.extend([10, 11, 12])
-print(k)
+k.extend((10, 11, 12)) # cannot omit the () for tuples here as extend only takes a single argument
+print('After extending the list with a tuple', k)
 
 # reverse and sort
 k.reverse() # reverse k
@@ -109,8 +112,8 @@ h = "not perplexing do handwriting family where I illegibly know doctors".split(
 h.sort(key = len) # use len function on each element and use the result as the sorting key 
 print(h)
 
-# to keep the orignal list unchanged when sorting and reverse; reversed and sorted work on any iterable sequence
+# to keep the orignal list unchanged when sorting and reverse; use reversed and sorted which work on any iterable sequence
 hr = reversed(h) # h is unchanged; this returns an iterator which is lazy evaluated 
 print(list(hr))
-hs = sorted(h) # h is still unchanged 
+hs = sorted(h) # h is still unchanged; again returns an iterator which is evaluated only once! 
 print(hs)
