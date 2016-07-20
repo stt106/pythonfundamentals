@@ -26,7 +26,7 @@ print(a is None) # test equality
 print(bool(0))
 print(bool(0.0))
 print(bool(""))
-print(bool([]))
+print(bool([])) # the same applies for all other collections e.g. tuple, set, dict 
 print(bool(None)) # flase 
 
 # all other numbers and non-empty string and collections are truey, including the string 'False'
@@ -43,3 +43,4 @@ if "eggs": # bool ctor is rarely used in python
 
 # break terminates the innermost loop
        
+
